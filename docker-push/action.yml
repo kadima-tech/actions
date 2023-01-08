@@ -1,0 +1,71 @@
+name: "Deploy to artifact registry"
+description: "Builds a docker image and pushes it to GCR"
+inputs:
+  token:
+    description: "The npm token to use for the build"
+    required: true
+
+  service:
+    description: "The service to compile"
+    required: true
+
+  gcr-service-json:
+    description: "The P12 credentials to login to GCR with"
+    required: true
+
+  tag:
+    description: "The tag name"
+    required: false
+    default: latest
+
+  install:
+    default: true
+    required: false
+    description: "Install dependencies"
+
+  project:
+    required: true
+    description: "The project for which we're running this"
+  
+runs:
+  using: "composite"
+  steps:
+    - name: Install NPM dependencies
+      if: ${{ inputs.install == true }}
+      uses: ./.github/actions/node
+      with:
+        token: ${{ inputs.token }}
+        service: ${{ inputs.service }}
+        
+    - name: Cache build folder
+      uses: actions/cache@v2
+      with:
+        path: ${{ inputs.service }}/build
+        key: build-${{ github.sha }}-${{ inputs.service }}
+
+    - uses: google-github-actions/setup-gcloud@v0.2.1
+      with:
+        project_id: kadima-terraform
+        service_account_key: ${{ inputs.gcr-service-json }}
+        export_default_credentials: true
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - name: login to gcp Docker
+      shell: bash
+      run: |-
+        gcloud --quiet auth configure-docker europe-west1-docker.pkg.dev
+
+    - id: docker-push-tagged
+      name: Tag Docker image and push to Google Artifact Registry
+      uses: docker/build-push-action@v2
+      with:
+        context: ${{ inputs.service }}
+        # cache-from: type=gha
+        # cache-to: type=gha,mode=max
+        file: ${{ inputs.service }}/docker/Dockerfile
+        build-args: |
+          AUTH_TOKEN=${{ inputs.token }}
+        push: true
+        tags: |
+            europe-west1-docker.pkg.dev/kadima-terraform/${{ inputs.project }}/${{ inputs.service }}:${{ inputs.tag }}
