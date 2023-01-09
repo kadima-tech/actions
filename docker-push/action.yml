@@ -56,6 +56,10 @@ runs:
       run: |-
         gcloud --quiet auth configure-docker europe-west1-docker.pkg.dev
 
+    - name: extract basename from tag
+      id: base
+      run: echo "tag=$(basename ${{ inputs.tag }})" >> $GITHUB_OUTPUT
+
     - id: docker-push-tagged
       name: Tag Docker image and push to Google Artifact Registry
       uses: docker/build-push-action@v2
@@ -68,4 +72,4 @@ runs:
           AUTH_TOKEN=${{ inputs.token }}
         push: true
         tags: |
-            europe-west1-docker.pkg.dev/kadima-terraform/${{ inputs.project }}/${{ inputs.service }}:$(basename ${{ inputs.tag }})
+            europe-west1-docker.pkg.dev/kadima-terraform/${{ inputs.project }}/${{ inputs.service }}:${{ steps.base.outputs.tag  }}
