@@ -68,4 +68,4 @@ runs:
           AUTH_TOKEN=${{ inputs.token }}
         push: true
         tags: |
-            europe-west1-docker.pkg.dev/kadima-terraform/${{ inputs.project }}/${{ inputs.service }}:${{ inputs.tag }}
+            europe-west1-docker.pkg.dev/kadima-terraform/${{ inputs.project }}/${{ inputs.service }}:$(basename ${{ inputs.tag }})
