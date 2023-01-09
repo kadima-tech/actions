@@ -57,6 +57,7 @@ runs:
         gcloud --quiet auth configure-docker europe-west1-docker.pkg.dev
 
     - name: extract basename from tag
+      shell: bash
       id: base
       run: echo "tag=$(basename ${{ inputs.tag }})" >> $GITHUB_OUTPUT
 
