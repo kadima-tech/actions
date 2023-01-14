@@ -1,0 +1,26 @@
+name: 'Run tests'
+description: 'Runs test in repository'
+inputs:
+  token:
+    required: true
+    description: 'NPM Token to use'
+  baseDir:
+    required: true
+    description: 'The baseDir to run the tests for'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install NPM dependencies
+      uses: kadima-tech/actions/node@master
+      with:
+        token: ${{ inputs.token }}
+        baseDir: ${{ inputs.baseDir }}
+
+    # - name: Run linting
+    #   shell: bash
+    #   run: make lint baseDir=${{ inputs.baseDir }}
+
+    - name: Run tests
+      shell: bash
+      run: make test baseDir=${{ inputs.baseDir }}

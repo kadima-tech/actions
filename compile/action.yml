@@ -1,0 +1,24 @@
+name: "Compiles the baseDir"
+description: "Compiles typescript code into javascript"
+inputs:
+  baseDir:
+    description: "The baseDir to compile"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install NPM dependencies
+      uses: kadima-tech/actions/node@master
+      with:
+        baseDir: ${{ inputs.baseDir }}
+        
+    - name: Compile app
+      shell: bash
+      run: make compile baseDir=${{ inputs.baseDir }}
+
+    - name: Cache build folder
+      uses: actions/cache@v2
+      with:
+        path: ${{ inputs.baseDir }}/build
+        key: build-${{ github.sha }}-${{ inputs.baseDir }}
