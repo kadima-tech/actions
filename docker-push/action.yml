@@ -5,8 +5,8 @@ inputs:
     description: "The npm token to use for the build"
     required: true
 
-  service:
-    description: "The service to compile"
+  baseDir:
+    description: "The baseDir to compile"
     required: true
 
   gcr-service-json:
@@ -35,13 +35,13 @@ runs:
       uses: ./.github/actions/node
       with:
         token: ${{ inputs.token }}
-        service: ${{ inputs.service }}
+        baseDir: ${{ inputs.baseDir }}
         
     - name: Cache build folder
       uses: actions/cache@v2
       with:
-        path: ${{ inputs.service }}/build
-        key: build-${{ github.sha }}-${{ inputs.service }}
+        path: ${{ inputs.baseDir }}/build
+        key: build-${{ github.sha }}-${{ inputs.baseDir }}
 
     - uses: google-github-actions/setup-gcloud@v0.2.1
       with:
@@ -65,10 +65,10 @@ runs:
       name: Tag Docker image and push to Google Artifact Registry
       uses: docker/build-push-action@v2
       with:
-        context: ${{ inputs.service }}
+        context: ${{ inputs.baseDir }}
         # cache-from: type=gha
         # cache-to: type=gha,mode=max
-        file: ${{ inputs.service }}/docker/Dockerfile
+        file: ${{ inputs.baseDir }}/docker/Dockerfile
         build-args: |
           AUTH_TOKEN=${{ inputs.token }}
         push: true

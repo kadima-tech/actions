@@ -1,0 +1,40 @@
+name: 'Deploy to compute engine'
+description: 'Replaces the running instance with the latest on GCE'
+inputs:
+  stage:
+    description: 'The stage for deployment (development|staging|production)'
+    required: true
+
+  baseDir:
+    description: 'The baseDir to deploy to'
+    required: true
+
+  tag:
+    description: 'The docker tag to deploy to the baseDir'
+    required: true
+    default: latest
+
+  gcr-service-json:
+    description: 'The P12 credentials to login to GCR with'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get the project id for this stage
+      id: meta
+      shell: bash
+      run: |-
+        export PROJECT_ID=$(make print.project_id stage=${{ inputs.stage }})
+        echo "::set-output name=project_id::$(echo $PROJECT_ID)"
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: ${{ steps.meta.outputs.project_id }}
+        service_account_key: ${{ inputs.gcr-service-json }}
+        export_default_credentials: true
+
+    - name: Deploy the container
+      shell: bash
+      run: make cloudrun.deploy.${{ inputs.baseDir }} tag=$(basename ${{ inputs.tag }}) stage=${{ inputs.stage }}
