@@ -68,7 +68,7 @@ jobs:
       - name: Deploy to Google
         uses: kadima-tech/actions/deploy-to-cloudrun@master
         with:
-          baseDir: ${{ inputs.directory }}
+          baseDir: ${{ inputs.baseDir }}
           gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}
           stage: ${{ inputs.stage }}
           tag: ${{ inputs.tag }}
