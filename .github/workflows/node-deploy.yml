@@ -1,0 +1,69 @@
+name: Node QA
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+      baseDir:
+        required: true
+        type: string
+      stage:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+      artifact_registry_upload_key:
+        required: false
+      cloudrun_uploader_service_account:
+        required: true
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          token: ${{ secrets.token }}
+
+      - name: Run tests
+        uses: kadima-tech/actions/test@master
+        with:
+          token: ${{ github.token }}
+          baseDir: ${{ inputs.baseDir }}
+ 
+  install-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: kadima-tech/actions/checkout@master
+        with:
+          submodules: recursive
+          token: ${{ secrets.token }}
+
+      - name: Install NPM dependencies and compile app
+        uses: kadima-tech/actions/compile@master
+        with:
+          baseDir: ${{ inputs.baseDir }}
+          
+      - name: Publish docker container
+        uses: kadima-tech/actions/docker-push@master
+        with:
+          token: ${{ github.token }}
+          gcr-service-json: ${{ secrets.artifact_registry_upload_key }}
+          baseDir: ${{ inputs.baseDir }}
+          project: ${{ inputs.project }}
+
+      - name: Deploy to Google
+        uses: kadima-tech/actions/deploy-to-cloudrun@master
+        with:
+          baseDir: ${{ inputs.directory }}
+          gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}
+          stage: ${{ inputs.stage }}

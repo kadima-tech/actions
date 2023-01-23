@@ -1,0 +1,48 @@
+name: Docker Image Deploy
+on:
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+      baseDir:
+        required: true
+        type: string
+      stage:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+      artifact_registry_upload_key:
+        required: false
+      cloudrun_uploader_service_account:
+        required: true
+
+jobs:
+  install-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: kadima-tech/actions/checkout@master
+        with:
+          submodules: recursive
+          token: ${{ secrets.token }}
+      
+      - name: Publish docker container
+        uses: kadima-tech/actions/docker-push@master
+        with:
+          token: ${{ github.token }}
+          gcr-service-json: ${{ secrets.artifact_registry_upload_key }}
+          baseDir: ${{ inputs.baseDir }}
+          project: ${{ inputs.project }}
+          tag: ${{ github.head_ref || github.ref }}
+
+      - name: Deploy to Google
+        uses: kadima-tech/actions/deploy-to-cloudrun@master
+        with:
+          baseDir: ${{ inputs.baseDir }}
+          gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}
+          stage: ${{ inputs.stage }}
+          tag: ${{ github.head_ref || github.ref }}
