@@ -16,10 +16,9 @@ on:
         required: true
         type: string
       postgres:
-        required: true
         default: false
         type: boolean
-        
+
     secrets:
       token:
         required: true
