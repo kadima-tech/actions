@@ -38,7 +38,7 @@ runs:
         baseDir: ${{ inputs.baseDir }}
         
     - name: Cache build folder
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ inputs.baseDir }}/build
         key: build-${{ github.sha }}-${{ inputs.baseDir }}
@@ -63,7 +63,7 @@ runs:
 
     - id: docker-push-tagged
       name: Tag Docker image and push to Google Artifact Registry
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v3
       with:
         context: ${{ inputs.baseDir }}
         # cache-from: type=gha
