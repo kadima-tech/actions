@@ -12,6 +12,9 @@ on:
       stage:
         required: true
         type: string
+      tag:
+        required: true
+        type: string
     secrets:
       token:
         required: true
@@ -60,6 +63,7 @@ jobs:
           gcr-service-json: ${{ secrets.artifact_registry_upload_key }}
           baseDir: ${{ inputs.baseDir }}
           project: ${{ inputs.project }}
+          tag: ${{ inputs.tag }}
 
       - name: Deploy to Google
         uses: kadima-tech/actions/deploy-to-cloudrun@master
@@ -67,3 +71,4 @@ jobs:
           baseDir: ${{ inputs.directory }}
           gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}
           stage: ${{ inputs.stage }}
+          tag: ${{ inputs.tag }}
