@@ -11,7 +11,7 @@ inputs:
 
   postgres-username:
     description: 'The username for the database'
-    default: standin
+    required: true
 
   postgres-password:
     description: 'The password for the postgres user'
@@ -20,7 +20,6 @@ inputs:
   postgres-database:
     description: 'The database name'
     required: true
-
 
   gcr-service-json:
     description: 'The P12 credentials to login to GCR with'

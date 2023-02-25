@@ -26,6 +26,12 @@ on:
         required: false
       cloudrun_uploader_service_account:
         required: true
+      postgres_username:
+        required: false
+      postgres_password:
+        required: false
+      postgres_database:
+        required: false
 
 jobs:
   test:
@@ -118,6 +124,7 @@ jobs:
           baseDir: ${{ inputs.baseDir }}
           gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}
           stage: ${{ inputs.stage }}
+          postgres-username: ${{ secrets.postgres_username }}
           postgres-password: ${{ secrets.postgres_password }}
           postgres-database: ${{ secrets.postgres_database }}
 
