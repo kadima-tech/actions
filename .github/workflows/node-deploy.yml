@@ -111,6 +111,16 @@ jobs:
           project: ${{ inputs.project }}
           tag: ${{ inputs.tag }}
 
+      - name: Run Migrations
+        uses: kadima-tech/actions/migrate@master
+        if: ${{ fromJSON(inputs.postgres) }}
+        with:
+          baseDir: ${{ inputs.baseDir }}
+          gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}
+          stage: ${{ inputs.stage }}
+          postgres-password: ${{ secrets.postgres_password }}
+          postgres-database: ${{ secrets.postgres_database }}
+
       - name: Deploy to Google
         uses: kadima-tech/actions/deploy-to-cloudrun@master
         with:
