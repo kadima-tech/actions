@@ -1,32 +1,32 @@
-name: 'Runs migrations'
-description: 'Runs migrations for the given baseDir against the given instance name'
+name: "Runs migrations"
+description: "Runs migrations for the given baseDir against the given instance name"
 inputs:
   stage:
-    description: 'The stage for deployment (development|staging|production)'
+    description: "The stage for deployment (development|staging|production)"
     required: true
 
   baseDir:
-    description: 'The baseDir to compile'
+    description: "The baseDir to compile"
     required: true
 
   postgres-username:
-    description: 'The username for the database'
+    description: "The username for the database"
     required: true
 
   postgres-password:
-    description: 'The password for the postgres user'
+    description: "The password for the postgres user"
     required: true
 
   postgres-database:
-    description: 'The database name'
+    description: "The database name"
     required: true
 
   gcr-service-json:
-    description: 'The P12 credentials to login to GCR with'
+    description: "The P12 credentials to login to GCR with"
     required: true
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Get the project id and instance name for this stage
       id: meta
@@ -36,6 +36,11 @@ runs:
         echo "::set-output name=project_id::$(echo $PROJECT_ID)"
         export INSTANCE_NAME=$(make print.cloudsql_instance stage=${{ inputs.stage }} baseDir=${{ inputs.baseDir }})
         echo "::set-output name=cloudsql_instance::$(echo $INSTANCE_NAME)"
+
+    - id: auth
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ inputs.gcr-service-json }}
 
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1

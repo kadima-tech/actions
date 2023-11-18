@@ -26,7 +26,7 @@ inputs:
   project:
     required: true
     description: "The project for which we're running this"
-  
+
 runs:
   using: "composite"
   steps:
@@ -36,12 +36,17 @@ runs:
       with:
         token: ${{ inputs.token }}
         baseDir: ${{ inputs.baseDir }}
-        
+
     - name: Cache build folder
       uses: actions/cache@v3
       with:
         path: ${{ inputs.baseDir }}/build
         key: build-${{ github.sha }}-${{ inputs.baseDir }}
+
+    - id: auth
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ inputs.gcr-service-json }}
 
     - uses: google-github-actions/setup-gcloud@v1
       with:
@@ -73,4 +78,4 @@ runs:
           AUTH_TOKEN=${{ inputs.token }}
         push: true
         tags: |
-            europe-west1-docker.pkg.dev/kadima-terraform/${{ inputs.project }}/${{ inputs.baseDir }}:${{ steps.base.outputs.tag  }}
+          europe-west1-docker.pkg.dev/kadima-terraform/${{ inputs.project }}/${{ inputs.baseDir }}:${{ steps.base.outputs.tag  }}
