@@ -46,8 +46,6 @@ runs:
       uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ steps.meta.outputs.project_id }}
-        service_account_key: ${{ inputs.gcr-service-json }}
-        export_default_credentials: true
 
     - name: Setup Cloud SQL proxy
       uses: mattes/gce-cloudsql-proxy-action@v1

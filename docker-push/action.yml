@@ -51,8 +51,6 @@ runs:
     - uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: kadima-terraform
-        service_account_key: ${{ inputs.gcr-service-json }}
-        export_default_credentials: true
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
