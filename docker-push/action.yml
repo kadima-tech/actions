@@ -31,6 +31,11 @@ inputs:
     required: false
     description: "The docker file to use"
 
+  context:
+    required: false
+    description: "The docker context to use"
+    default: .
+
   artifact-repository-project:
     required: true
     description: "The artifactory project to which the images should be deployed"
@@ -79,15 +84,17 @@ runs:
         if [ -z "${{inputs.dockerfile}}" ]
         then
           echo "dockerfile=${{inputs.baseDir}}/docker/Dockerfile" >> $GITHUB_OUTPUT
+          echo "context=${{inputs.baseDir}} >> $GITHUB_OUTPUT"
         else
           echo "dockerfile=${{inputs.dockerfile}}" >> $GITHUB_OUTPUT
+          echo "context=${{inputs.context}} >> $GITHUB_OUTPUT"
         fi
 
     - id: docker-push-tagged
       name: Tag Docker image and push to Google Artifact Registry
       uses: docker/build-push-action@v3
       with:
-        context: ${{ inputs.baseDir }}
+        context: ${{ steps.dockerfile.outputs.context }}
         # cache-from: type=gha
         # cache-to: type=gha,mode=max
         file: ${{ steps.dockerfile.outputs.dockerfile }}
