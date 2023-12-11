@@ -1,16 +1,16 @@
-name: 'Setup NPM Job'
-description: 'Sets up an authorized NPM job'
+name: "Setup NPM Job"
+description: "Sets up an authorized NPM job"
 inputs:
   baseDir:
     required: true
-    description: 'The baseDir to setup'
+    description: "The baseDir to setup"
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - uses: actions/setup-node@v4
       with:
         node-version: 20
-        cache-dependency-path: '${{inputs.baseDir}}/yarn.lock'
+        cache-dependency-path: "${{inputs.baseDir}}/yarn.lock"
 
     - name: Install npm modules
       shell: bash
