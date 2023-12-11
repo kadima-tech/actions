@@ -151,14 +151,17 @@ jobs:
           --health-retries 5
 
   install-and-deploy:
-    needs: [test, test-with-postgres]
+    needs: [test, test-with-postgres, test-with-postgres-and-redis]
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
     if: |
       always() && 
-      (needs.test-with-postgres.result == 'success' && needs.test.result == 'skipped') ||
-      (needs.test-with-postgres.result == 'skipped' && needs.test.result == 'success')
+      (
+        needs.test-with-postgres.result == 'success' ||
+        needs.test.result == 'success' ||
+        needs.test-with-postgres-and-redis.result == 'success'
+      )
 
     steps:
       - uses: kadima-tech/actions/checkout@dockerfile-arg
