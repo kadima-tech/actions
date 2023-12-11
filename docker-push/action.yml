@@ -75,7 +75,9 @@ runs:
     - name: extract basename from tag
       shell: bash
       id: base
-      run: echo "tag=$(basename ${{ inputs.tag }})" >> $GITHUB_OUTPUT
+      run: |-
+        echo "tag=$(basename ${{ inputs.tag }})" >> $GITHUB_OUTPUT
+        echo "service=$(basename ${{ inputs.baseDir }})"
 
     - name: determine dockerfile to use
       shell: bash
@@ -103,4 +105,4 @@ runs:
           SRC_DIR=${{ inputs.baseDir }}
         push: true
         tags: |
-          europe-west1-docker.pkg.dev/${{ inputs.artifact-repository-project }}/${{ inputs.project }}/$(basename ${{ inputs.baseDir }}):${{ steps.base.outputs.tag  }}
+          europe-west1-docker.pkg.dev/${{ inputs.artifact-repository-project }}/${{ inputs.project }}/${{steps.base.outputs.service}}:${{ steps.base.outputs.tag  }}
