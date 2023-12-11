@@ -22,6 +22,10 @@ on:
         required: false
         type: string
         description: "The docker file to use"
+      artifact-repository-project:
+        required: true
+        type: string
+        description: The artifact repository to use
 
     secrets:
       token:
@@ -121,6 +125,7 @@ jobs:
           project: ${{ inputs.project }}
           tag: ${{ inputs.tag }}
           dockerfile: ${{ inputs.dockerfile }}
+          artifact-repository-project: ${{ inputs.artifact-repository-project }}
 
       - name: Run Migrations
         uses: kadima-tech/actions/migrate@master

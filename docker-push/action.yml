@@ -31,6 +31,10 @@ inputs:
     required: false
     description: "The docker file to use"
 
+  artifact-repository-project:
+    required: true
+    description: "The artifactory project to which the images should be deployed"
+
 runs:
   using: "composite"
   steps:
@@ -54,7 +58,7 @@ runs:
 
     - uses: google-github-actions/setup-gcloud@v1
       with:
-        project_id: kadima-terraform
+        project_id: $(inputs.artifact-repository-project)
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
@@ -68,6 +72,17 @@ runs:
       id: base
       run: echo "tag=$(basename ${{ inputs.tag }})" >> $GITHUB_OUTPUT
 
+    - name: determine dockerfile to use
+      shell: bash
+      id: dockerfile
+      run: |-
+        if [ -z "$(inputs.dockerfile)" ]
+        then
+          echo "dockerfile=${inputs.baseDir}/docker/Dockerfile" >> $GITHUB_OUTPUT
+        else
+          echo "dockerfile=${inputs.dockerfile}" >> $GITHUB_OUTPUT
+        fi
+
     - id: docker-push-tagged
       name: Tag Docker image and push to Google Artifact Registry
       uses: docker/build-push-action@v3
@@ -75,9 +90,9 @@ runs:
         context: ${{ inputs.baseDir }}
         # cache-from: type=gha
         # cache-to: type=gha,mode=max
-        file: ${{ inputs.dockerfile || "${{inputs.baseDir}}/docker/Dockerfile" }}
+        file: ${{ steps.dockerfile.outputs.dockerfile }}
         build-args: |
           AUTH_TOKEN=${{ inputs.token }}
         push: true
         tags: |
-          europe-west1-docker.pkg.dev/kadima-terraform/${{ inputs.project }}/${{ inputs.baseDir }}:${{ steps.base.outputs.tag  }}
+          europe-west1-docker.pkg.dev/$(inputs.artifact-repository-project)/${{ inputs.project }}/${{ inputs.baseDir }}:${{ steps.base.outputs.tag  }}
