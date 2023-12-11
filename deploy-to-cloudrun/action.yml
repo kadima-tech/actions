@@ -40,4 +40,4 @@ runs:
 
     - name: Deploy the container
       shell: bash
-      run: make cloudrun.deploy.${{ inputs.baseDir }} tag=$(basename ${{ inputs.tag }}) stage=${{ inputs.stage }}
+      run: make cloudrun.deploy baseDir=${{ inputs.baseDir }} tag=$(basename ${{ inputs.tag }}) stage=${{ inputs.stage }}
