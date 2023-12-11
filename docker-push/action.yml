@@ -76,11 +76,11 @@ runs:
       shell: bash
       id: dockerfile
       run: |-
-        if [ -z "$(inputs.dockerfile)" ]
+        if [ -z "${{inputs.dockerfile}}" ]
         then
-          echo "dockerfile=${inputs.baseDir}/docker/Dockerfile" >> $GITHUB_OUTPUT
+          echo "dockerfile=${{inputs.baseDir}}/docker/Dockerfile" >> $GITHUB_OUTPUT
         else
-          echo "dockerfile=${inputs.dockerfile}" >> $GITHUB_OUTPUT
+          echo "dockerfile=${{inputs.dockerfile}}" >> $GITHUB_OUTPUT
         fi
 
     - id: docker-push-tagged
