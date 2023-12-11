@@ -67,7 +67,7 @@ jobs:
           baseDir: ${{ inputs.baseDir }}
 
   test-with-postgres:
-    if: ${{ fromJSON(inputs.postgres) }}
+    if: ${{ fromJSON(inputs.postgres) && fromJSON(inputs.redis) != true }}
     name: Run tests
     runs-on: ubuntu-latest
 
