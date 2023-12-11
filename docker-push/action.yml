@@ -34,7 +34,7 @@ inputs:
   context:
     required: false
     description: "The docker context to use"
-    default: .
+    default: "."
 
   artifact-repository-project:
     required: true
@@ -100,6 +100,7 @@ runs:
         file: ${{ steps.dockerfile.outputs.dockerfile }}
         build-args: |
           AUTH_TOKEN=${{ inputs.token }}
+          SRC_DIR=${{ inputs.baseDir }}
         push: true
         tags: |
           europe-west1-docker.pkg.dev/${{ inputs.artifact-repository-project }}/${{ inputs.project }}/${{ inputs.baseDir }}:${{ steps.base.outputs.tag  }}
