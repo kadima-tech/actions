@@ -18,6 +18,10 @@ on:
       postgres:
         default: false
         type: boolean
+      dockerfile:
+        required: false
+        type: string
+        description: "The docker file to use"
 
     secrets:
       token:
@@ -50,7 +54,7 @@ jobs:
         with:
           token: ${{ github.token }}
           baseDir: ${{ inputs.baseDir }}
- 
+
   test-with-postgres:
     if: ${{ fromJSON(inputs.postgres) }}
     name: Run tests
@@ -70,7 +74,7 @@ jobs:
         with:
           token: ${{ github.token }}
           baseDir: ${{ inputs.baseDir }}
- 
+
     services:
       postgres:
         image: postgres
@@ -107,15 +111,16 @@ jobs:
         uses: kadima-tech/actions/compile@master
         with:
           baseDir: ${{ inputs.baseDir }}
-          
+
       - name: Publish docker container
-        uses: kadima-tech/actions/docker-push@master
+        uses: kadima-tech/actions/docker-push@dockerfile-arg
         with:
           token: ${{ github.token }}
           gcr-service-json: ${{ secrets.artifact_registry_upload_key }}
           baseDir: ${{ inputs.baseDir }}
           project: ${{ inputs.project }}
           tag: ${{ inputs.tag }}
+          dockerfile: ${{ inputs.dockerfile }}
 
       - name: Run Migrations
         uses: kadima-tech/actions/migrate@master

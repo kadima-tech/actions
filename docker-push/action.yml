@@ -27,6 +27,10 @@ inputs:
     required: true
     description: "The project for which we're running this"
 
+  dockerfile:
+    required: false
+    description: "The docker file to use"
+
 runs:
   using: "composite"
   steps:
@@ -71,7 +75,7 @@ runs:
         context: ${{ inputs.baseDir }}
         # cache-from: type=gha
         # cache-to: type=gha,mode=max
-        file: ${{ inputs.baseDir }}/docker/Dockerfile
+        file: ${{ inputs.dockerfile || "${{inputs.baseDir}}/docker/Dockerfile" }}
         build-args: |
           AUTH_TOKEN=${{ inputs.token }}
         push: true
