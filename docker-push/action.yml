@@ -58,7 +58,7 @@ runs:
 
     - uses: google-github-actions/setup-gcloud@v1
       with:
-        project_id: $(inputs.artifact-repository-project)
+        project_id: ${{ inputs.artifact-repository-project }}
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
@@ -95,4 +95,4 @@ runs:
           AUTH_TOKEN=${{ inputs.token }}
         push: true
         tags: |
-          europe-west1-docker.pkg.dev/$(inputs.artifact-repository-project)/${{ inputs.project }}/${{ inputs.baseDir }}:${{ steps.base.outputs.tag  }}
+          europe-west1-docker.pkg.dev/${{ inputs.artifact-repository-project }}/${{ inputs.project }}/${{ inputs.baseDir }}:${{ steps.base.outputs.tag  }}
