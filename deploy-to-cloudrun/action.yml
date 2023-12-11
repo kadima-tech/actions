@@ -26,7 +26,7 @@ runs:
       shell: bash
       run: |-
         echo project_id=$(make print.project_id stage=${{ inputs.stage }}) >> $GITHUB_OUTPUT
-        echo tag=$(basename ${{ inputs.tag }})
+        echo tag=$(basename ${{ inputs.tag }}) >> $GITHUB_OUTPUT
 
     - id: auth
       uses: google-github-actions/auth@v1
