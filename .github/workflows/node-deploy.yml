@@ -21,6 +21,9 @@ on:
       postgres:
         default: false
         type: boolean
+      redis:
+        default: false
+        type: boolean
       dockerfile:
         required: false
         type: string
@@ -96,6 +99,53 @@ jobs:
           POSTGRES_DB: test
         options: >-
           --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+  test-with-postgres-and-redis:
+    if: ${{ fromJSON(inputs.postgres) && fromJSON(inputs.redis)}}
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
+
+    steps:
+      - uses: kadima-tech/actions/checkout@dockerfile-arg
+        with:
+          submodules: recursive
+          token: ${{ secrets.token }}
+          scope: ${{ inputs.scope }}
+
+      - name: Run tests
+        uses: kadima-tech/actions/test@master
+        with:
+          token: ${{ github.token }}
+          baseDir: ${{ inputs.baseDir }}
+
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_HOST: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: mysecretpassword
+          POSTGRES_DB: test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
