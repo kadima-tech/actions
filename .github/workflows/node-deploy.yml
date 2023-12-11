@@ -139,7 +139,7 @@ jobs:
           postgres-database: ${{ secrets.postgres_database }}
 
       - name: Deploy to Google
-        uses: kadima-tech/actions/deploy-to-cloudrun@master
+        uses: kadima-tech/actions/deploy-to-cloudrun@dockerfile-arg
         with:
           baseDir: ${{ inputs.baseDir }}
           gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}

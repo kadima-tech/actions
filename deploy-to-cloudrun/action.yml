@@ -25,8 +25,8 @@ runs:
       id: meta
       shell: bash
       run: |-
-        export PROJECT_ID=$(make print.project_id stage=${{ inputs.stage }})
-        echo "::set-output name=project_id::$(echo $PROJECT_ID)"
+        echo project_id=$(make print.project_id stage=${{ inputs.stage }}) >> $GITHUB_OUTPUT
+        echo tag=$(basename ${{ inputs.tag }})
 
     - id: auth
       uses: google-github-actions/auth@v1
@@ -40,4 +40,4 @@ runs:
 
     - name: Deploy the container
       shell: bash
-      run: make cloudrun.deploy baseDir=${{ inputs.baseDir }} tag=$(basename ${{ inputs.tag }}) stage=${{ inputs.stage }}
+      run: make cloudrun.deploy baseDir=${{ inputs.baseDir }} tag=${{steps.meta.outputs.tag}} stage=${{ inputs.stage }}
