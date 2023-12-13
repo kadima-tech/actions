@@ -29,10 +29,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@dockerfile-arg
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+          scope: ${{ inputs.scope }}
 
       - name: Run tests
         uses: kadima-tech/actions/test@master
@@ -137,7 +138,7 @@ jobs:
         needs.test-with-postgres-and-redis.result == 'success'
       )
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@dockerfile-arg
         with:
           submodules: recursive
           token: ${{ secrets.token }}
