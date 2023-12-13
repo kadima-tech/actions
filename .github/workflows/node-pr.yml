@@ -6,6 +6,9 @@ on:
       project:
         required: true
         type: string
+      scope:
+        required: false
+        type: string
       baseDir:
         required: true
         type: string
@@ -34,7 +37,7 @@ jobs:
       - name: Run tests
         uses: kadima-tech/actions/test@master
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
 
   test-with-postgres:
@@ -55,7 +58,7 @@ jobs:
       - name: Run tests
         uses: kadima-tech/actions/test@master
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
 
     services:
@@ -92,7 +95,7 @@ jobs:
       - name: Run tests
         uses: kadima-tech/actions/test@master
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
 
     services:
