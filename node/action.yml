@@ -12,6 +12,12 @@ runs:
         node-version: 20
         cache-dependency-path: "${{inputs.baseDir}}/yarn.lock"
 
+    - name: 'Authenticate with private npm registry'
+      shell: bash
+      run: |
+        npm config set ${{ inputs.scope }}:registry https://npm.pkg.github.com
+        npm config set //npm.pkg.github.com/:_authToken ${{ inputs.token }}
+        
     - name: Install npm modules
       shell: bash
       run: make install baseDir=${{inputs.baseDir}}
