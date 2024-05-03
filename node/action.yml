@@ -6,7 +6,7 @@ inputs:
     description: "The baseDir to setup"
   scope:
     required: false
-    default: "@kadima-tech"
+    default: "kadima-tech"
     description: 'NPM Scope to use'
   token:
     required: true
