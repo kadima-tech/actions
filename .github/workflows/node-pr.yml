@@ -29,10 +29,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: kadima-tech/actions/checkout@dockerfile-arg
+      - uses: kadima-tech/actions/checkout@master
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+          scope: ${{ inputs.scope }}
+
+      - name: Install NPM dependencies
+        uses: kadima-tech/actions/node@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
@@ -50,10 +57,17 @@ jobs:
       DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
 
     steps:
-      - uses: kadima-tech/actions/checkout@dockerfile-arg
+      - uses: kadima-tech/actions/checkout@master
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+          scope: ${{ inputs.scope }}
+
+      - name: Install NPM dependencies
+        uses: kadima-tech/actions/node@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
@@ -87,10 +101,16 @@ jobs:
       DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
 
     steps:
-      - uses: kadima-tech/actions/checkout@dockerfile-arg
+      - uses: kadima-tech/actions/checkout@master
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+
+      - name: Install NPM dependencies
+        uses: kadima-tech/actions/node@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
@@ -138,10 +158,17 @@ jobs:
         needs.test-with-postgres-and-redis.result == 'success'
       )
     steps:
-      - uses: kadima-tech/actions/checkout@dockerfile-arg
+      - uses: kadima-tech/actions/checkout@master
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+          scope: ${{ inputs.scope }}
+
+      - name: Install NPM dependencies
+        uses: kadima-tech/actions/node@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Install NPM dependencies and compile app

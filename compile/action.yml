@@ -8,11 +8,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install NPM dependencies
-      uses: kadima-tech/actions/node@master
-      with:
-        baseDir: ${{ inputs.baseDir }}
-        
     - name: Compile app
       shell: bash
       run: make compile baseDir=${{ inputs.baseDir }}

@@ -54,10 +54,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: kadima-tech/actions/checkout@dockerfile-arg
+      - uses: kadima-tech/actions/checkout@master
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+          scope: ${{ inputs.scope }}
+
+      - name: Install NPM dependencies
+        uses: kadima-tech/actions/node@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
@@ -75,10 +82,17 @@ jobs:
       DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
 
     steps:
-      - uses: kadima-tech/actions/checkout@dockerfile-arg
+      - uses: kadima-tech/actions/checkout@master
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+          scope: ${{ inputs.scope }}
+
+      - name: Install NPM dependencies
+        uses: kadima-tech/actions/node@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
@@ -112,10 +126,16 @@ jobs:
       DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
 
     steps:
-      - uses: kadima-tech/actions/checkout@dockerfile-arg
+      - uses: kadima-tech/actions/checkout@master
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+
+      - name: Install NPM dependencies
+        uses: kadima-tech/actions/node@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
@@ -164,10 +184,17 @@ jobs:
       )
 
     steps:
-      - uses: kadima-tech/actions/checkout@dockerfile-arg
+      - uses: kadima-tech/actions/checkout@master
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+          scope: ${{ inputs.scope }}
+
+      - name: Install NPM dependencies
+        uses: kadima-tech/actions/node@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Install NPM dependencies and compile app
@@ -176,7 +203,7 @@ jobs:
           baseDir: ${{ inputs.baseDir }}
 
       - name: Publish docker container
-        uses: kadima-tech/actions/docker-push@dockerfile-arg
+        uses: kadima-tech/actions/docker-push@master
         with:
           token: ${{ secrets.token }}
           gcr-service-json: ${{ secrets.artifact_registry_upload_key }}
@@ -198,7 +225,7 @@ jobs:
           postgres-database: ${{ secrets.postgres_database }}
 
       - name: Deploy to Google
-        uses: kadima-tech/actions/deploy-to-cloudrun@dockerfile-arg
+        uses: kadima-tech/actions/deploy-to-cloudrun@master
         with:
           baseDir: ${{ inputs.baseDir }}
           gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}

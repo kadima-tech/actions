@@ -9,10 +9,6 @@ inputs:
     description: "The NPM token to be used for package installs"
     default: false
 
-  scope:
-    description: "The scope to use for the token"
-    default: "kadima-tech"
-
 outputs:
   token:
     description: "The Github Access Token"
@@ -35,9 +31,3 @@ runs:
       with:
         submodules: ${{ inputs.submodules }}
         token: ${{ inputs.token }}
-
-    - name: "Authenticate with private npm registry"
-      shell: bash
-      run: |
-        npm config set @${{ inputs.scope }}:registry https://npm.pkg.github.com
-        npm config set //npm.pkg.github.com/:_authToken ${{ inputs.token }}

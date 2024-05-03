@@ -7,10 +7,11 @@ inputs:
   scope:
     required: false
     default: "kadima-tech"
-    description: 'NPM Scope to use'
+    description: "NPM Scope to use"
   token:
     required: true
-    description: 'NPM Token to use'
+    description: "NPM Token to use"
+
 runs:
   using: "composite"
   steps:
@@ -19,12 +20,12 @@ runs:
         node-version: 20
         cache-dependency-path: "${{inputs.baseDir}}/yarn.lock"
 
-    - name: 'Authenticate with private npm registry'
+    - name: "Authenticate with private npm registry"
       shell: bash
       run: |
         npm config set @${{ inputs.scope }}:registry https://npm.pkg.github.com
         npm config set //npm.pkg.github.com/:_authToken ${{ inputs.token }}
-        
+
     - name: Install npm modules
       shell: bash
       run: make install baseDir=${{inputs.baseDir}}
