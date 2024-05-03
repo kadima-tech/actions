@@ -4,6 +4,13 @@ inputs:
   baseDir:
     required: true
     description: "The baseDir to setup"
+  scope:
+    required: false
+    default: kadima-tech
+    description: 'NPM Scope to use'
+  token:
+    required: true
+    description: 'NPM Token to use'
 runs:
   using: "composite"
   steps:
