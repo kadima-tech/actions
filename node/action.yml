@@ -6,7 +6,7 @@ inputs:
     description: "The baseDir to setup"
   scope:
     required: false
-    default: kadima-tech
+    default: "@kadima-tech"
     description: 'NPM Scope to use'
   token:
     required: true
@@ -22,7 +22,7 @@ runs:
     - name: 'Authenticate with private npm registry'
       shell: bash
       run: |
-        npm config set ${{ inputs.scope }}:registry https://npm.pkg.github.com
+        npm config set @${{ inputs.scope }}:registry https://npm.pkg.github.com
         npm config set //npm.pkg.github.com/:_authToken ${{ inputs.token }}
         
     - name: Install npm modules
