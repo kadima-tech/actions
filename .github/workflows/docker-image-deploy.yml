@@ -28,13 +28,13 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@v1
         with:
           submodules: recursive
           token: ${{ secrets.token }}
       
       - name: Publish docker container
-        uses: kadima-tech/actions/docker-push@master
+        uses: kadima-tech/actions/docker-push@v1
         with:
           token: ${{ github.token }}
           gcr-service-json: ${{ secrets.artifact_registry_upload_key }}
@@ -43,7 +43,7 @@ jobs:
           tag: ${{ inputs.tag }}
 
       - name: Deploy to Google
-        uses: kadima-tech/actions/deploy-to-cloudrun@master
+        uses: kadima-tech/actions/deploy-to-cloudrun@v1
         with:
           baseDir: ${{ inputs.baseDir }}
           gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}
