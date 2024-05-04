@@ -86,10 +86,10 @@ runs:
         if [ -z "${{inputs.dockerfile}}" ]
         then
           echo "dockerfile=${{inputs.baseDir}}/docker/Dockerfile" >> $GITHUB_OUTPUT
-          echo "context=${{inputs.baseDir}} >> $GITHUB_OUTPUT"
+          echo "context=${{inputs.baseDir}}" >> $GITHUB_OUTPUT
         else
           echo "dockerfile=${{inputs.dockerfile}}" >> $GITHUB_OUTPUT
-          echo "context=${{inputs.context}} >> $GITHUB_OUTPUT"
+          echo "context=${{inputs.context}}" >> $GITHUB_OUTPUT
         fi
 
     - id: docker-push-tagged
