@@ -213,6 +213,7 @@ jobs:
     if: |
       always() && 
       (
+        needs.test-with-redis.result == 'success' ||
         needs.test-with-postgres.result == 'success' ||
         needs.test.result == 'success' ||
         needs.test-with-postgres-and-redis.result == 'success'
