@@ -86,7 +86,49 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.token }}
+
+      - name: Install NPM dependencies
+        uses: kadima-tech/actions/node@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
+
+      - name: Run tests
+        uses: kadima-tech/actions/test@master
+        with:
+          token: ${{ secrets.token }}
+          baseDir: ${{ inputs.baseDir }}
+
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_HOST: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: mysecretpassword
+          POSTGRES_DB: test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+  test-with-redis:
+    if: ${{ fromJSON(inputs.redis) && fromJSON(inputs.postgres) != true }}
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
+
+    steps:
+      - uses: kadima-tech/actions/checkout@master
+        with:
+          submodules: recursive
+          token: ${{ secrets.token }}
 
       - name: Install NPM dependencies
         uses: kadima-tech/actions/node@master
@@ -171,7 +213,8 @@ jobs:
           --health-retries 5
 
   install-and-deploy:
-    needs: [test, test-with-postgres, test-with-postgres-and-redis]
+    needs:
+      [test, test-with-postgres, test-with-redis, test-with-postgres-and-redis]
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
