@@ -49,7 +49,7 @@ on:
 
 jobs:
   test:
-    if: ${{ fromJSON(inputs.postgres) != true }}
+    if: ${{ fromJSON(inputs.postgres) != true && fromJSON(inputs.redis) != true }}
     name: Run tests
     runs-on: ubuntu-latest
 
