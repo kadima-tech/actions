@@ -54,21 +54,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@v1
         with:
           submodules: recursive
           token: ${{ secrets.token }}
           scope: ${{ inputs.scope }}
 
       - name: Install NPM dependencies
-        uses: kadima-tech/actions/node@master
+        uses: kadima-tech/actions/node@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
-        uses: kadima-tech/actions/test@master
+        uses: kadima-tech/actions/test@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
@@ -82,7 +82,7 @@ jobs:
       DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
 
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@v1
         with:
           submodules: recursive
           token: ${{ secrets.token }}
@@ -131,14 +131,14 @@ jobs:
           token: ${{ secrets.token }}
 
       - name: Install NPM dependencies
-        uses: kadima-tech/actions/node@master
+        uses: kadima-tech/actions/node@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
-        uses: kadima-tech/actions/test@master
+        uses: kadima-tech/actions/test@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
@@ -168,20 +168,20 @@ jobs:
       DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
 
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@v1
         with:
           submodules: recursive
           token: ${{ secrets.token }}
 
       - name: Install NPM dependencies
-        uses: kadima-tech/actions/node@master
+        uses: kadima-tech/actions/node@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
-        uses: kadima-tech/actions/test@master
+        uses: kadima-tech/actions/test@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
@@ -227,26 +227,26 @@ jobs:
       )
 
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@v1
         with:
           submodules: recursive
           token: ${{ secrets.token }}
           scope: ${{ inputs.scope }}
 
       - name: Install NPM dependencies
-        uses: kadima-tech/actions/node@master
+        uses: kadima-tech/actions/node@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Install NPM dependencies and compile app
-        uses: kadima-tech/actions/compile@master
+        uses: kadima-tech/actions/compile@v1
         with:
           baseDir: ${{ inputs.baseDir }}
 
       - name: Publish docker container
-        uses: kadima-tech/actions/docker-push@master
+        uses: kadima-tech/actions/docker-push@v1
         with:
           token: ${{ secrets.token }}
           gcr-service-json: ${{ secrets.artifact_registry_upload_key }}
@@ -257,7 +257,7 @@ jobs:
           artifact-repository-project: ${{ inputs.artifact-repository-project }}
 
       - name: Run Migrations
-        uses: kadima-tech/actions/migrate@master
+        uses: kadima-tech/actions/migrate@v1
         if: ${{ fromJSON(inputs.postgres) }}
         with:
           baseDir: ${{ inputs.baseDir }}
@@ -268,7 +268,7 @@ jobs:
           postgres-database: ${{ secrets.postgres_database }}
 
       - name: Deploy to Google
-        uses: kadima-tech/actions/deploy-to-cloudrun@master
+        uses: kadima-tech/actions/deploy-to-cloudrun@v1
         with:
           baseDir: ${{ inputs.baseDir }}
           gcr-service-json: ${{ secrets.cloudrun_uploader_service_account }}

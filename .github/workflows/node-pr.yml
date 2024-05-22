@@ -29,21 +29,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@v1
         with:
           submodules: recursive
           token: ${{ secrets.token }}
           scope: ${{ inputs.scope }}
 
       - name: Install NPM dependencies
-        uses: kadima-tech/actions/node@master
+        uses: kadima-tech/actions/node@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
-        uses: kadima-tech/actions/test@master
+        uses: kadima-tech/actions/test@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
@@ -57,21 +57,21 @@ jobs:
       DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
 
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@v1
         with:
           submodules: recursive
           token: ${{ secrets.token }}
           scope: ${{ inputs.scope }}
 
       - name: Install NPM dependencies
-        uses: kadima-tech/actions/node@master
+        uses: kadima-tech/actions/node@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
-        uses: kadima-tech/actions/test@master
+        uses: kadima-tech/actions/test@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
@@ -101,20 +101,20 @@ jobs:
       DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
 
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@v1
         with:
           submodules: recursive
           token: ${{ secrets.token }}
 
       - name: Install NPM dependencies
-        uses: kadima-tech/actions/node@master
+        uses: kadima-tech/actions/node@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Run tests
-        uses: kadima-tech/actions/test@master
+        uses: kadima-tech/actions/test@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
@@ -158,20 +158,20 @@ jobs:
         needs.test-with-postgres-and-redis.result == 'success'
       )
     steps:
-      - uses: kadima-tech/actions/checkout@master
+      - uses: kadima-tech/actions/checkout@v1
         with:
           submodules: recursive
           token: ${{ secrets.token }}
           scope: ${{ inputs.scope }}
 
       - name: Install NPM dependencies
-        uses: kadima-tech/actions/node@master
+        uses: kadima-tech/actions/node@v1
         with:
           token: ${{ secrets.token }}
           baseDir: ${{ inputs.baseDir }}
           scope: ${{ inputs.scope }}
 
       - name: Install NPM dependencies and compile app
-        uses: kadima-tech/actions/compile@master
+        uses: kadima-tech/actions/compile@v1
         with:
           baseDir: ${{ inputs.baseDir }}
