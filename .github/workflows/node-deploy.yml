@@ -121,9 +121,6 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
 
-    env:
-      DATABASE_URL: postgresql://postgres:mysecretpassword@localhost:5432/test
-
     steps:
       - uses: kadima-tech/actions/checkout@master
         with:
@@ -144,17 +141,12 @@ jobs:
           baseDir: ${{ inputs.baseDir }}
 
     services:
-      postgres:
-        image: postgres
+      redis:
+        image: redis
         ports:
-          - 5432:5432
-        env:
-          POSTGRES_HOST: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: mysecretpassword
-          POSTGRES_DB: test
+          - 6379:6379
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
